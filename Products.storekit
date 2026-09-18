@@ -1,0 +1,68 @@
+{
+  "identifier" : "a8e31c6a-4b7f-4d21-9c55-1a2b3c4d5e01",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "b8e31c6a-4b7f-4d21-9c55-1a2b3c4d5e02",
+      "localizations" : [
+        {
+          "description" : "Unlimited saved spots, custom reminder lead time, and an optional weekly digest. Pay once.",
+          "displayName" : "Pro Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "ticketshield.pro.lifetime",
+      "referenceName" : "Pro Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "c8e31c6a-4b7f-4d21-9c55-1a2b3c4d5e03",
+      "localizations" : [
+        {
+          "description" : "TicketShield Pro",
+          "displayName" : "Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "19.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "d8e31c6a-4b7f-4d21-9c55-1a2b3c4d5e04",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited saved spots, custom reminder lead time, and an optional weekly digest. Billed once a year.",
+              "displayName" : "Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "ticketshield.pro.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Annual",
+          "subscriptionGroupID" : "c8e31c6a-4b7f-4d21-9c55-1a2b3c4d5e03",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
