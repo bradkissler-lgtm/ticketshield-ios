@@ -60,6 +60,19 @@ TEST_STATUS=$?
 set -e
 echo "unit tests exit $TEST_STATUS"
 
+# xcodebuild test shuts the simulator down when it finishes.
+boot_simulator() {
+  local state
+  state="$(xcrun simctl list devices | awk -v id="$UDID" 'index($0, id)')"
+  echo "simulator state: ${state:-unknown}"
+  if printf '%s' "$state" | grep -q "(Booted)"; then
+    return 0
+  fi
+  xcrun simctl boot "$UDID"
+  xcrun simctl bootstatus "$UDID" -b
+}
+boot_simulator
+
 OUT="$ROOT/AppStore/screenshots/6.7-inch"
 mkdir -p "$OUT"
 rm -f "$OUT"/*.png
