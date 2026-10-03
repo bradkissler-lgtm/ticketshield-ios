@@ -12,4 +12,4 @@ Frames:
 4. `04-moved-car.png` — spot detail with Moved car
 5. `05-pro-paywall.png` — Lifetime $4.99 and Annual $19.99
 
-PNGs are committed here after a successful run. Until that artifact exists, they are not in the repo yet.
+The PNGs in `6.7-inch/` are from a GitHub-hosted `macos-latest` run on an **iPhone 16 Plus** simulator (6.7-inch, **1290×2796**). `device.txt` records that device name.
