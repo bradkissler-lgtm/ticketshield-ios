@@ -1,4 +1,4 @@
-# TicketShield — App Store submission checklist
+# ParkShield — App Store submission checklist
 
 Work through this on a Mac with Xcode 15+ and an App Store Connect Admin/App Manager account.
 
@@ -6,7 +6,7 @@ Work through this on a Mac with Xcode 15+ and an App Store Connect Admin/App Man
 
 - [ ] Open `TicketShield.xcodeproj` (not a missing workspace).
 - [ ] Signing & Capabilities → Team selected; bundle ID `com.vancap.ticketshield`.
-- [ ] Display name TicketShield; version `1.0.0`, build `1` (bump build on each upload).
+- [ ] Display name ParkShield; version `1.0.0`, build `1` (bump build on each upload). Bundle ID stays `com.vancap.ticketshield`.
 - [ ] Run on a physical iPhone: camera OCR, Photos OCR, save spot, notification permission, Moved car.
 - [ ] Run on Simulator using `Fixtures/sample-street-cleaning-sign.png`.
 - [ ] Product → Test (⌘U) — `TicketShieldTests` pass.
@@ -21,9 +21,9 @@ Work through this on a Mac with Xcode 15+ and an App Store Connect Admin/App Man
 
 ## App Store Connect — app record
 
-- [ ] New iOS app: name TicketShield, bundle `com.vancap.ticketshield`, SKU `ticketshield-ios`, user access as needed.
+- [ ] New iOS app: name ParkShield, bundle `com.vancap.ticketshield`, SKU `ticketshield-ios`, user access as needed.
 - [ ] Category Utilities, age 4+.
-- [ ] Privacy Policy URL: public HTTPS hosting of `PRIVACY_POLICY.md` (GitHub Pages, or a site you control). Contact on the policy is bkissler@vancap.com.
+- [ ] Privacy Policy URL: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html once GitHub Pages serves `docs/privacy.html`. Contact on the policy is bkissler@vancap.com.
 - [ ] Support URL or mailto:bkissler@vancap.com.
 - [ ] Copy from `STORE_LISTING.md` (subtitle, promo, description, keywords).
 - [ ] App Privacy: **Data Not Collected**. Tracking = No.
@@ -51,7 +51,7 @@ Do not create monthly or $9.99 lifetime unless you change the app’s paywall to
 ## Review notes to paste
 
 ```
-No account. Photos and OCR stay on device (Vision). Flow: + / Photo a parking sign → choose Fixtures/sample-street-cleaning-sign.png (or camera) → confirm days/times/label → Save. Notifications are local (UNUserNotificationCenter). “Moved car” clears today’s alert only.
+ParkShield (bundle com.vancap.ticketshield) does not require an account. Photos and OCR stay on device (Vision). Flow: + / Photo a parking sign → choose Fixtures/sample-street-cleaning-sign.png (or camera) → confirm days/times/label → Save. Notifications are local (UNUserNotificationCenter). “Moved car” clears today’s alert only.
 
 IAP (StoreKit 2):
 - ticketshield.pro.lifetime — $4.99 non-consumable (paywall default)
@@ -61,7 +61,9 @@ Restore Purchases is on the paywall and in Settings.
 
 ## Archive and upload
 
-- [ ] Product → Archive (Any iOS Device).
+GitHub-hosted path: `.github/workflows/ios.yml` on `macos-latest`. It uploads only when the Apple secrets listed in `README.md` are already in the repository. It does not create an Apple Developer account.
+
+- [ ] Product → Archive (Any iOS Device), or the `app-store` job in `.github/workflows/ios.yml`.
 - [ ] Organizer → Distribute App → App Store Connect → Upload.
 - [ ] Wait for processing; select the build on the version page.
 - [ ] Answer advertising ID = No.

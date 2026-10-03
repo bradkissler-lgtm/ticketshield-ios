@@ -5,8 +5,8 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-	<string>TicketShield uses the camera to photograph a parking or street-cleaning sign. The text is read on this iPhone to suggest days and hours. Photos stay on your device and are not uploaded.</string>
+	<string>ParkShield uses the camera to photograph a parking or street-cleaning sign. The text is read on this iPhone to suggest days and hours. Photos stay on your device and are not uploaded.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>TicketShield lets you choose an existing photo of a parking or street-cleaning sign. The text is read on this iPhone to suggest days and hours. Photos stay on your device and are not uploaded.</string>
+	<string>ParkShield lets you choose an existing photo of a parking or street-cleaning sign. The text is read on this iPhone to suggest days and hours. Photos stay on your device and are not uploaded.</string>
 </dict>
 </plist>

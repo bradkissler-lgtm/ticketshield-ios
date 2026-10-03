@@ -1,11 +1,13 @@
-# TicketShield
+# ParkShield
 
 iOS 17+ SwiftUI app that turns a parking / street-cleaning sign into a **local** reminder.
 
-**Bundle ID:** `com.vancap.ticketshield`  
+**Customer-facing name:** ParkShield  
+**Bundle ID:** `com.vancap.ticketshield` (unchanged)  
+**Xcode target / Swift module:** `TicketShield`  
 **Thesis:** One avoided curb ticket ($25–$75) pays for the app.
 
-This repo is a complete Xcode project. It was authored on Linux, so it has **not** been compiled with Xcode here. Open it on a Mac.
+GitHub Actions builds this on a GitHub-hosted `macos-latest` runner (`.github/workflows/ios.yml`). That workflow also captures 6.7-inch simulator screenshots and, only when Apple signing secrets are already in the repo, archives and uploads to App Store Connect.
 
 ## One feature (v1)
 
@@ -37,7 +39,7 @@ Out of scope: accounts, city APIs, ticket payment, maps, scare-copy, trademarked
 The Simulator has no camera. Use **Choose photo**:
 
 1. Drag `Fixtures/sample-street-cleaning-sign.png` onto the Simulator (or save it to Photos).
-2. In TicketShield, tap **Photo a parking sign** → **Choose photo**.
+2. In ParkShield, tap **Photo a parking sign** → **Choose photo**.
 3. Confirm Monday 8:00–11:00 AM (or correct whatever OCR suggested) and save.
 4. Allow notifications when asked. Reminders are local; they still fire in Simulator if the clock reaches the fire time.
 
@@ -63,7 +65,7 @@ Purchases are StoreKit 2. Restore is on the paywall and in Settings.
 
 Create the IAP products **before** submitting the binary. Use the same IDs as `Products.storekit`.
 
-1. App Store Connect → your app **TicketShield** (bundle `com.vancap.ticketshield`) → **Monetization → In-App Purchases**.
+1. App Store Connect → your app **ParkShield** (bundle `com.vancap.ticketshield`) → **Monetization → In-App Purchases**.
 2. **Non-Consumable**
    - Product ID: `ticketshield.pro.lifetime`
    - Reference name: Pro Lifetime
@@ -86,7 +88,11 @@ Local testing does **not** need App Store Connect if the Xcode scheme’s StoreK
 
 Photos and OCR never leave the device. No account. No analytics SDK. Contact: **bkissler@vancap.com**.
 
-Full text: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md). Host that file at a public HTTPS URL and paste the URL into App Store Connect.
+Full text: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md). The same policy is in [`docs/privacy.html`](docs/privacy.html) for GitHub Pages.
+
+Intended App Store Connect privacy policy URL (after Pages is enabled on `main` / `docs`):
+
+https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html
 
 ## Layout
 
@@ -98,5 +104,29 @@ Products.storekit          Local IAP catalog
 Fixtures/                  Sample sign image for Simulator
 STORE_LISTING.md           App Store copy
 PRIVACY_POLICY.md          Privacy policy
+docs/privacy.html          Same policy, for GitHub Pages
 SUBMISSION_CHECKLIST.md    Review / ASC checklist
+.github/workflows/ios.yml  macos-latest build, screenshots, conditional upload
 ```
+
+## GitHub-hosted macOS
+
+`.github/workflows/ios.yml` runs on `macos-latest`:
+
+- Simulator build and `TicketShieldTests` with code signing disabled (no personal Mac, no Apple team required for this job).
+- 6.7-inch screenshots via `scripts/ci-simulator.sh`. Accepted pixel sizes are 1290×2796 and 1284×2778.
+- Archive and App Store Connect upload only when the signing secrets below are already present. The job records present/missing names and does not print secret values.
+
+Secrets the upload job accepts (canonical name, or a listed alias):
+
+| Purpose | Canonical secret | Aliases also recognized |
+|---|---|---|
+| API key id | `APP_STORE_CONNECT_API_KEY_ID` | `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_API_KEY_KEY_ID`, `APPLE_API_KEY_ID`, `ASC_KEY_ID`, `API_KEY_ID` |
+| Issuer id | `APP_STORE_CONNECT_API_KEY_ISSUER_ID` | `APP_STORE_CONNECT_API_ISSUER_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APPLE_API_ISSUER_ID`, `ASC_ISSUER_ID`, `API_ISSUER_ID` |
+| API private key (PEM or base64 PEM) | `APP_STORE_CONNECT_API_KEY` | `APP_STORE_CONNECT_API_KEY_BASE64`, `APP_STORE_CONNECT_API_KEY_P8`, `APP_STORE_CONNECT_API_KEY_KEY`, `APPLE_API_KEY`, `APPLE_API_KEY_BASE64`, `ASC_KEY`, `AUTH_KEY_P8` |
+| Team ID (secret or variable) | `APPLE_TEAM_ID` | `DEVELOPMENT_TEAM`, `TEAM_ID`, `APPLE_DEVELOPER_TEAM_ID` |
+| Distribution certificate p12, base64 | `BUILD_CERTIFICATE_BASE64` | `DISTRIBUTION_CERTIFICATE_BASE64`, `APPLE_CERTIFICATE_BASE64`, `APPLE_CERTIFICATE_P12_BASE64`, `IOS_DISTRIBUTION_CERTIFICATE_BASE64`, `CERTIFICATE_P12_BASE64`, `P12_BASE64` |
+| p12 password | `P12_PASSWORD` | `CERTIFICATE_PASSWORD`, `BUILD_CERTIFICATE_PASSWORD`, `APPLE_CERTIFICATE_PASSWORD` |
+| Provisioning profile, base64 | `BUILD_PROVISION_PROFILE_BASE64` | `PROVISIONING_PROFILE_BASE64`, `APPLE_PROVISIONING_PROFILE_BASE64`, `IOS_PROVISIONING_PROFILE_BASE64`, `PROVISION_PROFILE_BASE64` |
+
+Manual signing runs when the API key, certificate, password, and profile are all present (team id is read from the profile if needed). Automatic signing runs when the API key and team id are present and the certificate set is not. Otherwise the upload step is skipped.
