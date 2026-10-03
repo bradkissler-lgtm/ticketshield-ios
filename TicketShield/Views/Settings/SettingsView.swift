@@ -74,7 +74,7 @@ struct SettingsView: View {
                     }
                 }
 
-                Section("TicketShield Pro") {
+                Section("ParkShield Pro") {
                     LabeledContent("Status", value: entitlements.isPro ? "Pro" : "Free · 1 saved spot")
                     if !entitlements.isPro {
                         Button("See Pro options") { showPaywall = true }
@@ -136,7 +136,7 @@ struct SettingsView: View {
     }
 
     private var privacyMailURL: URL {
-        URL(string: "mailto:bkissler@vancap.com?subject=TicketShield%20privacy")!
+        URL(string: "mailto:bkissler@vancap.com?subject=ParkShield%20privacy")!
     }
 
     private func replenish() async {
@@ -155,8 +155,8 @@ struct PrivacyOnDeviceView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("TicketShield is built to keep parking-sign photos and reminder times on your iPhone.")
-                    Text("The camera and photo library are used only to read a sign you choose. Optical character recognition runs on device with Apple’s Vision framework. Photos are not uploaded, and there is no TicketShield account.")
+                    Text("ParkShield is built to keep parking-sign photos and reminder times on your iPhone.")
+                    Text("The camera and photo library are used only to read a sign you choose. Optical character recognition runs on device with Apple’s Vision framework. Photos are not uploaded, and there is no ParkShield account.")
                     Text("Reminders use local notifications. In-app purchases are handled by Apple. Questions: bkissler@vancap.com.")
                 }
                 .padding(24)

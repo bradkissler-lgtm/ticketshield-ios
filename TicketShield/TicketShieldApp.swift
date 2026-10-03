@@ -7,21 +7,32 @@ struct TicketShieldApp: App {
     @State private var entitlements = EntitlementStore()
     @State private var preferences = AppPreferences()
 
+    private let modelContainer: ModelContainer
+
     init() {
-        NotificationBootstrap.install()
+        if !ScreenshotMode.isActive {
+            NotificationBootstrap.install()
+        }
+        modelContainer = ScreenshotMode.makeContainer()
     }
 
     var body: some Scene {
         WindowGroup {
-            AppRootView()
-                .environment(entitlements)
-                .environment(preferences)
-                .tint(TSTheme.teal)
-                .task {
-                    await entitlements.start()
+            Group {
+                if let screen = ScreenshotMode.screen {
+                    ScreenshotHost(screen: screen)
+                } else {
+                    AppRootView()
+                        .task {
+                            await entitlements.start()
+                        }
                 }
+            }
+            .environment(entitlements)
+            .environment(preferences)
+            .tint(TSTheme.teal)
         }
-        .modelContainer(for: ParkingSpot.self)
+        .modelContainer(modelContainer)
     }
 }
 

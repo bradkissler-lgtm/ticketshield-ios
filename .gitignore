@@ -1,4 +1,5 @@
 # Xcode
+build/
 xcuserdata/
 DerivedData/
 *.xcuserstate
@@ -23,6 +24,8 @@ DerivedData/
 
 # Swift Package Manager
 .build/
+__pycache__/
+*.pyc
 .swiftpm/
 
 # Playgrounds

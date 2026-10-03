@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A00000000000000000000038 /* TicketShieldApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000022 /* TicketShieldApp.swift */; };
+		A0000000000000000000004D /* ScreenshotSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000004C /* ScreenshotSupport.swift */; };
 		A00000000000000000000039 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000023 /* Theme.swift */; };
 		A0000000000000000000003A /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000024 /* Weekday.swift */; };
 		A0000000000000000000003B /* ParkingSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000025 /* ParkingSpot.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		A00000000000000000000022 /* TicketShieldApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketShieldApp.swift; sourceTree = "<group>"; };
+		A0000000000000000000004C /* ScreenshotSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotSupport.swift; sourceTree = "<group>"; };
 		A00000000000000000000023 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A00000000000000000000024 /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
 		A00000000000000000000025 /* ParkingSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkingSpot.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000022 /* TicketShieldApp.swift */,
+				A0000000000000000000004C /* ScreenshotSupport.swift */,
 				A00000000000000000000023 /* Theme.swift */,
 				A00000000000000000000007 /* Models */,
 				A00000000000000000000008 /* Services */,
@@ -295,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A00000000000000000000038 /* TicketShieldApp.swift in Sources */,
+				A0000000000000000000004D /* ScreenshotSupport.swift in Sources */,
 				A00000000000000000000039 /* Theme.swift in Sources */,
 				A0000000000000000000003A /* Weekday.swift in Sources */,
 				A0000000000000000000003B /* ParkingSpot.swift in Sources */,
@@ -469,7 +473,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TicketShield/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TicketShield;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkShield;
+				INFOPLIST_KEY_CFBundleName = ParkShield;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -504,7 +509,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TicketShield/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TicketShield;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkShield;
+				INFOPLIST_KEY_CFBundleName = ParkShield;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

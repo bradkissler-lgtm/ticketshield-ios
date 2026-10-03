@@ -23,7 +23,7 @@ struct PaywallView: View {
                 .padding(24)
             }
             .background(TSTheme.groupedBackground)
-            .navigationTitle("TicketShield Pro")
+            .navigationTitle("ParkShield Pro")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -31,6 +31,7 @@ struct PaywallView: View {
                 }
             }
             .task {
+                guard !ScreenshotMode.isActive else { return }
                 if entitlements.products.isEmpty {
                     await entitlements.loadProducts()
                 }
@@ -142,7 +143,7 @@ struct PaywallView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(highlighted ? TSTheme.teal : Color.secondary)
-            .disabled(product == nil || entitlements.purchaseInProgress)
+            .disabled((product == nil && !ScreenshotMode.isActive) || entitlements.purchaseInProgress)
         }
         .padding(16)
         .background(Color(.secondarySystemGroupedBackground))

@@ -23,7 +23,7 @@ struct SpotListView: View {
                 }
             }
             .background(TSTheme.groupedBackground)
-            .navigationTitle("TicketShield")
+            .navigationTitle("ParkShield")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {

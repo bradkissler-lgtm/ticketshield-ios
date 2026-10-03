@@ -1,4 +1,4 @@
-# TicketShield — App Store listing
+# ParkShield — App Store listing
 
 Use this copy in App Store Connect. Do not add scare language, fake urgency, or trademarked city seals (NYC, SF, etc.) in screenshots or the icon.
 
@@ -6,7 +6,7 @@ Use this copy in App Store Connect. Do not add scare language, fake urgency, or 
 
 | Field | Value |
 |-------|--------|
-| Name | TicketShield |
+| Name | ParkShield |
 | Subtitle | Parking sign ticket reminders |
 | Bundle ID | com.vancap.ticketshield |
 | SKU | ticketshield-ios |
@@ -22,18 +22,18 @@ Snap the street-cleaning sign. We’ll remind you before the ticket window.
 
 ## Description
 
-TicketShield reads a parking or street-cleaning sign on your iPhone and reminds you before the restriction starts.
+ParkShield reads a parking or street-cleaning sign on your iPhone and reminds you before the restriction starts.
 
 How it works
 
 1. Photograph the curb sign — or pick a photo you already have.
-2. TicketShield suggests the days and hours using on-device text recognition.
+2. ParkShield suggests the days and hours using on-device text recognition.
 3. You confirm the schedule and a name for the spot.
 4. A local notification fires before the window (30 minutes by default; 15 or 60 if you prefer).
 
 Moved your car? Clear today’s alert for that spot. Next week’s reminder stays.
 
-Free includes one saved spot. TicketShield Pro unlocks unlimited spots, more reminder lead times, and an optional weekly digest. Pay $4.99 once, or $19.99 per year.
+Free includes one saved spot. ParkShield Pro unlocks unlimited spots, more reminder lead times, and an optional weekly digest. Pay $4.99 once, or $19.99 per year.
 
 Photos and sign text stay on your iPhone. There is no account, no map, and no city database.
 
@@ -50,7 +50,7 @@ First release: photograph a parking sign, confirm the schedule, and get a local 
 ## Support / Privacy / Marketing URLs
 
 - Support: mailto:bkissler@vancap.com (or a hosted FAQ later)
-- Privacy: host `PRIVACY_POLICY.md` and paste that HTTPS URL
+- Privacy: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html (`docs/privacy.html`, same text as `PRIVACY_POLICY.md`)
 - Marketing: optional
 
 ## In-app purchases (listing)
@@ -78,4 +78,4 @@ App preview video: not required for v1.
 
 ## Review notes (short)
 
-TicketShield does not require an account. To try the main flow in Simulator, add `Fixtures/sample-street-cleaning-sign.png` to Photos, choose it in-app, confirm Monday 8:00–11:00 AM, and save. Notifications are local. In-app purchases: `ticketshield.pro.lifetime` ($4.99) and `ticketshield.pro.annual` ($19.99/year). Restore Purchases is on the paywall.
+ParkShield does not require an account. To try the main flow in Simulator, add `Fixtures/sample-street-cleaning-sign.png` to Photos, choose it in-app, confirm Monday 8:00–11:00 AM, and save. Notifications are local. In-app purchases: `ticketshield.pro.lifetime` ($4.99) and `ticketshield.pro.annual` ($19.99/year). Restore Purchases is on the paywall.
