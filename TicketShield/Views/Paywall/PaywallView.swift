@@ -8,7 +8,7 @@ struct PaywallView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 16) {
                     header
                     comparison
                     products
@@ -136,8 +136,8 @@ struct PaywallView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             if subscriptionTerms {
-                subscriptionDisclosure
                 legalLinks
+                subscriptionDisclosure
             }
             Button {
                 if let product {
@@ -179,10 +179,9 @@ struct PaywallView: View {
     /// Guideline 3.1.2: title, length, price, and renewal terms for the auto-renewing product,
     /// shown before the Pro Annual purchase button.
     private var subscriptionDisclosure: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("\(LegalURLs.annualDisplayName) is an auto-renewing subscription: \(LegalURLs.annualLength) for \(annualPriceText) per year (\(ProductIDs.annual)).")
-            Text("Payment is charged to your Apple ID at confirmation of purchase. The subscription renews each year unless you cancel at least 24 hours before the end of the current period. Your account is charged for renewal within 24 hours before the period ends, at \(annualPriceText) per year.")
-            Text("Manage or cancel in Settings › Apple ID › Subscriptions. Pro Lifetime is \(lifetimePriceText) once and does not renew. No free trial.")
+        VStack(alignment: .leading, spacing: 4) {
+            Text("\(LegalURLs.annualDisplayName) auto-renews: \(LegalURLs.annualLength), \(annualPriceText) per year (\(ProductIDs.annual)).")
+            Text("Charged to your Apple ID at purchase. Renews yearly unless you cancel at least 24 hours before the period ends. Renewal is charged within those 24 hours. Manage in Settings › Apple ID › Subscriptions. Lifetime is \(lifetimePriceText) once and does not renew.")
         }
         .font(.footnote)
         .foregroundStyle(.secondary)
@@ -190,9 +189,11 @@ struct PaywallView: View {
     }
 
     private var legalLinks: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Link("Terms of Use (EULA)", destination: LegalURLs.terms)
-            Link("Privacy Policy", destination: LegalURLs.privacy)
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 14) {
+                Link("Terms of Use (EULA)", destination: LegalURLs.terms)
+                Link("Privacy Policy", destination: LegalURLs.privacy)
+            }
             Link("Apple Standard EULA", destination: LegalURLs.appleStandardEULA)
         }
         .font(.footnote.weight(.semibold))
