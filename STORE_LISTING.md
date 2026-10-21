@@ -37,6 +37,14 @@ Free includes one saved spot. ParkShield Pro unlocks unlimited spots, more remin
 
 Photos and sign text stay on your iPhone. There is no account, no map, and no city database.
 
+Subscriptions
+
+Pro Annual is an auto-renewing subscription: title Pro Annual, length 1 year, price $19.99 per year. Payment is charged to your Apple ID at confirmation of purchase. The subscription renews unless you cancel at least 24 hours before the end of the current period. Your account is charged for renewal within 24 hours before the period ends. Manage or cancel in your App Store account settings. Pro Lifetime is a one-time purchase of $4.99 and does not renew.
+
+Terms of Use (EULA): https://bradkissler-lgtm.github.io/ticketshield-ios/terms.html
+Privacy Policy: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html
+Apple Licensed Application EULA: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
 ## Keywords (100 characters max)
 
 parking,street cleaning,alternate side,reminder,curb,no parking,tow away,sign,ticket
@@ -49,9 +57,14 @@ First release: photograph a parking sign, confirm the schedule, and get a local 
 
 ## Support / Privacy / Marketing URLs
 
-- Support: mailto:bkissler@vancap.com (or a hosted FAQ later)
+These are web pages in `docs/`. They 404 until GitHub Pages is enabled on `main` / `/docs` after merge. The support URL is the web page, not a mailto link.
+
+- Support: https://bradkissler-lgtm.github.io/ticketshield-ios/support.html (`docs/support.html`)
 - Privacy: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html (`docs/privacy.html`, same text as `PRIVACY_POLICY.md`)
+- Terms of Use (EULA): https://bradkissler-lgtm.github.io/ticketshield-ios/terms.html (`docs/terms.html`)
 - Marketing: optional
+
+Paste the Subscriptions paragraph in the description (above) into App Store Connect so the metadata includes the title, length, price, and functional links required by guideline 3.1.2.
 
 ## In-app purchases (listing)
 

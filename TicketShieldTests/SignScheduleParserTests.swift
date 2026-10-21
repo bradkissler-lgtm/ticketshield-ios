@@ -91,4 +91,20 @@ final class SignScheduleParserTests: XCTestCase {
         XCTAssertTrue(ProductIDs.unlocksPro("ticketshield.pro.annual"))
         XCTAssertFalse(ProductIDs.unlocksPro("ticketshield.pro.monthly"))
     }
+
+    func testLegalURLsAreHttpsPages() {
+        let pages = [LegalURLs.privacy, LegalURLs.terms, LegalURLs.support]
+        for url in pages {
+            XCTAssertEqual(url.scheme, "https")
+            XCTAssertEqual(url.host, "bradkissler-lgtm.github.io")
+            XCTAssertTrue(url.path.hasPrefix("/ticketshield-ios/"))
+            XCTAssertFalse(url.absoluteString.contains("mailto:"))
+        }
+        XCTAssertTrue(LegalURLs.privacy.absoluteString.hasSuffix("/privacy.html"))
+        XCTAssertTrue(LegalURLs.terms.absoluteString.hasSuffix("/terms.html"))
+        XCTAssertTrue(LegalURLs.support.absoluteString.hasSuffix("/support.html"))
+        XCTAssertEqual(LegalURLs.appleStandardEULA.scheme, "https")
+        XCTAssertEqual(LegalURLs.annualPriceFallback, "$19.99")
+        XCTAssertEqual(LegalURLs.annualLength, "1 year")
+    }
 }

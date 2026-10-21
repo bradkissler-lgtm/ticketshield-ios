@@ -3,10 +3,17 @@ name: iOS
 on:
   push:
   workflow_dispatch:
+    inputs:
+      upload:
+        description: Upload an archive to TestFlight when Apple secrets are present
+        type: boolean
+        default: false
 
-# Build and screenshots use GitHub-hosted macOS only. Upload runs only when
-# Apple signing secrets are already stored on this repository. This workflow
-# never prints secret values.
+# Build and screenshots use GitHub-hosted macOS only. The TestFlight upload
+# runs only when ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8, and signing material
+# are already stored, and only on main or a manual dispatch with upload=true.
+# Missing secrets skip the upload and do not fail this workflow. Secret values
+# are never printed. The upload does not submit the app for App Review.
 jobs:
   simulator:
     name: Build, test, 6.7-inch screenshots
@@ -33,21 +40,22 @@ jobs:
           if-no-files-found: ignore
 
   app-store:
-    name: Archive and upload
+    name: TestFlight archive (gated)
     runs-on: macos-latest
     timeout-minutes: 45
     env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
       APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
       APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
       APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       API_KEY_ID: ${{ secrets.API_KEY_ID }}
       APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
-      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       API_ISSUER_ID: ${{ secrets.API_ISSUER_ID }}
       APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
       APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
@@ -101,6 +109,21 @@ jobs:
           path: apple-credentials.txt
           if-no-files-found: error
 
-      - name: Archive and upload to App Store Connect
-        if: steps.creds.outputs.upload_ready == 'true'
+      - name: Archive and upload to TestFlight
+        if: steps.creds.outputs.upload_ready == 'true' && (github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.upload))
         run: bash scripts/archive-and-upload.sh
+
+      - name: Explain TestFlight gate
+        if: always() && steps.creds.outcome == 'success'
+        run: |
+          echo "upload_ready=${{ steps.creds.outputs.upload_ready }}"
+          echo "signing_path=${{ steps.creds.outputs.signing_path }}"
+          echo "missing=${{ steps.creds.outputs.missing_secrets }}"
+          echo "This job uploads a build for TestFlight processing only. It does not submit the app for App Review."
+          if [ "${{ steps.creds.outputs.upload_ready }}" != "true" ]; then
+            echo "Upload skipped. Provide ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8, and signing (APPLE_TEAM_ID, or the distribution p12, p12 password, and App Store profile)."
+            exit 0
+          fi
+          if [ "${{ github.ref }}" != "refs/heads/main" ] && [ "${{ inputs.upload }}" != "true" ]; then
+            echo "Upload skipped. It runs on main, or when this workflow is dispatched with upload enabled."
+          fi

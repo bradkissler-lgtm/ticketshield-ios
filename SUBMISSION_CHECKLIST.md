@@ -23,8 +23,10 @@ Work through this on a Mac with Xcode 15+ and an App Store Connect Admin/App Man
 
 - [ ] New iOS app: name ParkShield, bundle `com.vancap.ticketshield`, SKU `ticketshield-ios`, user access as needed.
 - [ ] Category Utilities, age 4+.
-- [ ] Privacy Policy URL: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html once GitHub Pages serves `docs/privacy.html`. Contact on the policy is bkissler@vancap.com.
-- [ ] Support URL or mailto:bkissler@vancap.com.
+- [ ] GitHub Pages enabled after merge: Settings → Pages → Deploy from a branch → `main` → `/docs`. Confirm the three URLs below return pages, not 404.
+- [ ] Privacy Policy URL: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html (`docs/privacy.html`). Contact on the policy is bkissler@vancap.com.
+- [ ] Terms of Use (EULA) URL, in the description and (if you use a custom EULA) the EULA field: https://bradkissler-lgtm.github.io/ticketshield-ios/terms.html
+- [ ] Support URL (web page, not mailto): https://bradkissler-lgtm.github.io/ticketshield-ios/support.html
 - [ ] Copy from `STORE_LISTING.md` (subtitle, promo, description, keywords).
 - [ ] App Privacy: **Data Not Collected**. Tracking = No.
 - [ ] Encryption: HTTPS only; matches Info.plist.
@@ -59,17 +61,19 @@ IAP (StoreKit 2):
 Restore Purchases is on the paywall and in Settings.
 ```
 
-## Archive and upload
+## Archive and TestFlight upload
 
-GitHub-hosted path: `.github/workflows/ios.yml` on `macos-latest`. It uploads only when the Apple secrets listed in `README.md` are already in the repository. It does not create an Apple Developer account.
+GitHub-hosted path: the **TestFlight archive (gated)** job in `.github/workflows/ios.yml` on `macos-latest`. It exports with `xcodebuild` and uploads with `altool` or `iTMSTransporter` only when the secrets in `README.md` are already in the repository. It does not create an Apple Developer account, and it does not submit the build for App Review.
 
-- [ ] Product → Archive (Any iOS Device), or the `app-store` job in `.github/workflows/ios.yml`.
-- [ ] Organizer → Distribute App → App Store Connect → Upload.
-- [ ] Wait for processing; select the build on the version page.
+Without those secrets the job records them as missing and succeeds. Upload runs on `main`, or when the workflow is dispatched with **upload** checked.
+
+- [ ] Product → Archive (Any iOS Device), or the gated job above.
+- [ ] Organizer → Distribute App → App Store Connect → Upload, if you are not using the workflow.
+- [ ] Wait for TestFlight processing; select the build on the version page.
 - [ ] Answer advertising ID = No.
-- [ ] Submit for review with the IAPs.
+- [ ] Submit for review with the IAPs only when you intend to. The workflow does not do this step.
 
 ## After 1.0
 
-- [ ] Host the privacy policy if you used a temporary gist/Pages URL.
+- [ ] Privacy, terms, and support pages are the GitHub Pages URLs above. Do not swap in a gist.
 - [ ] Watch crash reports; do not add city APIs or accounts without a new spec.

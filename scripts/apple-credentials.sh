@@ -47,20 +47,21 @@ done
 
 note "secrets:"
 KEY_ID_ALIAS="$(first_present \
+  ASC_KEY_ID \
   APP_STORE_CONNECT_API_KEY_ID \
   APP_STORE_CONNECT_KEY_ID \
   APP_STORE_CONNECT_API_KEY_KEY_ID \
   APPLE_API_KEY_ID \
-  ASC_KEY_ID \
   API_KEY_ID || true)"
 ISSUER_ALIAS="$(first_present \
+  ASC_ISSUER_ID \
   APP_STORE_CONNECT_API_KEY_ISSUER_ID \
   APP_STORE_CONNECT_API_ISSUER_ID \
   APP_STORE_CONNECT_ISSUER_ID \
   APPLE_API_ISSUER_ID \
-  ASC_ISSUER_ID \
   API_ISSUER_ID || true)"
 KEY_ALIAS="$(first_present \
+  ASC_KEY_P8 \
   APP_STORE_CONNECT_API_KEY \
   APP_STORE_CONNECT_API_KEY_BASE64 \
   APP_STORE_CONNECT_API_KEY_P8 \
@@ -100,9 +101,9 @@ fi
 MATCH_PASSWORD_ALIAS="$(first_present MATCH_PASSWORD || true)"
 MATCH_GIT_ALIAS="$(first_present MATCH_GIT_URL MATCH_GIT_BASIC_AUTHORIZATION || true)"
 
-note "resolved APP_STORE_CONNECT_API_KEY_ID=${KEY_ID_ALIAS:-missing}"
-note "resolved APP_STORE_CONNECT_API_KEY_ISSUER_ID=${ISSUER_ALIAS:-missing}"
-note "resolved APP_STORE_CONNECT_API_KEY=${KEY_ALIAS:-missing}"
+note "resolved ASC_KEY_ID=${KEY_ID_ALIAS:-missing}"
+note "resolved ASC_ISSUER_ID=${ISSUER_ALIAS:-missing}"
+note "resolved ASC_KEY_P8=${KEY_ALIAS:-missing}"
 note "resolved APPLE_TEAM_ID=${TEAM_ALIAS:-missing}"
 note "resolved BUILD_CERTIFICATE_BASE64=${CERT_ALIAS:-missing}"
 note "resolved P12_PASSWORD=${P12_ALIAS:-missing}"
@@ -112,9 +113,9 @@ note "resolved MATCH_GIT_URL=${MATCH_GIT_ALIAS:-missing}"
 
 # Probe the canonical names explicitly so the log lists each required secret.
 CANONICAL=(
-  APP_STORE_CONNECT_API_KEY_ID
-  APP_STORE_CONNECT_API_KEY_ISSUER_ID
-  APP_STORE_CONNECT_API_KEY
+  ASC_KEY_ID
+  ASC_ISSUER_ID
+  ASC_KEY_P8
   APPLE_TEAM_ID
   BUILD_CERTIFICATE_BASE64
   P12_PASSWORD
@@ -124,21 +125,33 @@ for name in "${CANONICAL[@]}"; do
   present "$name" || true
 done
 
+MANUAL_READY=false
+AUTO_READY=false
+if [ -n "$CERT_ALIAS" ] && [ -n "$P12_ALIAS" ] && [ -n "$PROFILE_ALIAS" ]; then
+  MANUAL_READY=true
+fi
+if [ -n "$TEAM_ALIAS" ]; then
+  AUTO_READY=true
+fi
+
 MISSING=()
-[ -z "$KEY_ID_ALIAS" ] && MISSING+=(APP_STORE_CONNECT_API_KEY_ID)
-[ -z "$ISSUER_ALIAS" ] && MISSING+=(APP_STORE_CONNECT_API_KEY_ISSUER_ID)
-[ -z "$KEY_ALIAS" ] && MISSING+=(APP_STORE_CONNECT_API_KEY)
-[ -z "$TEAM_ALIAS" ] && MISSING+=(APPLE_TEAM_ID)
-[ -z "$CERT_ALIAS" ] && MISSING+=(BUILD_CERTIFICATE_BASE64)
-[ -z "$P12_ALIAS" ] && MISSING+=(P12_PASSWORD)
-[ -z "$PROFILE_ALIAS" ] && MISSING+=(BUILD_PROVISION_PROFILE_BASE64)
+[ -z "$KEY_ID_ALIAS" ] && MISSING+=(ASC_KEY_ID)
+[ -z "$ISSUER_ALIAS" ] && MISSING+=(ASC_ISSUER_ID)
+[ -z "$KEY_ALIAS" ] && MISSING+=(ASC_KEY_P8)
+if [ "$MANUAL_READY" != true ] && [ "$AUTO_READY" != true ]; then
+  MISSING+=(signing)
+  note "signing=missing"
+  note "signing_help=set APPLE_TEAM_ID for automatic signing, or BUILD_CERTIFICATE_BASE64 + P12_PASSWORD + BUILD_PROVISION_PROFILE_BASE64 for manual signing"
+else
+  note "signing=present"
+fi
 
 UPLOAD_READY=false
 SIGNING_PATH=none
-if [ -n "$KEY_ID_ALIAS" ] && [ -n "$ISSUER_ALIAS" ] && [ -n "$KEY_ALIAS" ] && [ -n "$CERT_ALIAS" ] && [ -n "$P12_ALIAS" ] && [ -n "$PROFILE_ALIAS" ]; then
+if [ -n "$KEY_ID_ALIAS" ] && [ -n "$ISSUER_ALIAS" ] && [ -n "$KEY_ALIAS" ] && [ "$MANUAL_READY" = true ]; then
   UPLOAD_READY=true
   SIGNING_PATH=manual
-elif [ -n "$KEY_ID_ALIAS" ] && [ -n "$ISSUER_ALIAS" ] && [ -n "$KEY_ALIAS" ] && [ -n "$TEAM_ALIAS" ]; then
+elif [ -n "$KEY_ID_ALIAS" ] && [ -n "$ISSUER_ALIAS" ] && [ -n "$KEY_ALIAS" ] && [ "$AUTO_READY" = true ]; then
   UPLOAD_READY=true
   SIGNING_PATH=automatic
 fi

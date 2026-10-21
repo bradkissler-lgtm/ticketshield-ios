@@ -7,7 +7,7 @@ iOS 17+ SwiftUI app that turns a parking / street-cleaning sign into a **local**
 **Xcode target / Swift module:** `TicketShield`  
 **Thesis:** One avoided curb ticket ($25–$75) pays for the app.
 
-GitHub Actions builds this on a GitHub-hosted `macos-latest` runner (`.github/workflows/ios.yml`). That workflow also captures 6.7-inch simulator screenshots and, only when Apple signing secrets are already in the repo, archives and uploads to App Store Connect.
+GitHub Actions builds this on a GitHub-hosted `macos-latest` runner (`.github/workflows/ios.yml`). That workflow also captures 6.7-inch simulator screenshots. It archives and uploads to TestFlight only when `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`, and signing secrets are already in the repo. It does not submit the app for App Review.
 
 ## One feature (v1)
 
@@ -88,11 +88,13 @@ Local testing does **not** need App Store Connect if the Xcode scheme’s StoreK
 
 Photos and OCR never leave the device. No account. No analytics SDK. Contact: **bkissler@vancap.com**.
 
-Full text: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md). The same policy is in [`docs/privacy.html`](docs/privacy.html) for GitHub Pages.
+Full text: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md). The same policy is in [`docs/privacy.html`](docs/privacy.html). Terms and support are static pages in the same folder.
 
-Intended App Store Connect privacy policy URL (after Pages is enabled on `main` / `docs`):
+App Store Connect URLs (they 404 until Pages is enabled on `main` / `/docs` after merge):
 
-https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html
+- Privacy: https://bradkissler-lgtm.github.io/ticketshield-ios/privacy.html
+- Terms of Use (EULA): https://bradkissler-lgtm.github.io/ticketshield-ios/terms.html
+- Support (web page, not mailto): https://bradkissler-lgtm.github.io/ticketshield-ios/support.html
 
 ## Layout
 
@@ -104,9 +106,9 @@ Products.storekit          Local IAP catalog
 Fixtures/                  Sample sign image for Simulator
 STORE_LISTING.md           App Store copy
 PRIVACY_POLICY.md          Privacy policy
-docs/privacy.html          Same policy, for GitHub Pages
+docs/                      Privacy, terms, and support pages for GitHub Pages
 SUBMISSION_CHECKLIST.md    Review / ASC checklist
-.github/workflows/ios.yml  macos-latest build, screenshots, conditional upload
+.github/workflows/ios.yml  macos-latest build, screenshots, gated TestFlight upload
 ```
 
 ## GitHub-hosted macOS
@@ -115,18 +117,40 @@ SUBMISSION_CHECKLIST.md    Review / ASC checklist
 
 - Simulator build and `TicketShieldTests` with code signing disabled (no personal Mac, no Apple team required for this job).
 - 6.7-inch screenshots via `scripts/ci-simulator.sh`. Accepted pixel sizes are 1290×2796 and 1284×2778.
-- Archive and App Store Connect upload only when the signing secrets below are already present. The job records present/missing names and does not print secret values.
+- TestFlight upload only when the Apple secrets below are already present, and only on `main` or a manual dispatch with **upload** checked. The job records present/missing names and does not print secret values. Missing secrets do not fail CI. The upload does not submit the app for App Review.
 
-Secrets the upload job accepts (canonical name, or a listed alias):
+### TestFlight secrets
 
-| Purpose | Canonical secret | Aliases also recognized |
+Create an App Store Connect API key (Users and Access → Integrations → App Store Connect API). Store the `.p8` as a repository secret. The key needs a role that can upload builds (Developer, App Manager, or Admin). Automatic signing from CI needs a key that can manage certificates (Admin). Manual signing can use a Developer or App Manager key plus a distribution certificate you already created.
+
+| Purpose | Secret | What to paste |
 |---|---|---|
-| API key id | `APP_STORE_CONNECT_API_KEY_ID` | `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_API_KEY_KEY_ID`, `APPLE_API_KEY_ID`, `ASC_KEY_ID`, `API_KEY_ID` |
-| Issuer id | `APP_STORE_CONNECT_API_KEY_ISSUER_ID` | `APP_STORE_CONNECT_API_ISSUER_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APPLE_API_ISSUER_ID`, `ASC_ISSUER_ID`, `API_ISSUER_ID` |
-| API private key (PEM or base64 PEM) | `APP_STORE_CONNECT_API_KEY` | `APP_STORE_CONNECT_API_KEY_BASE64`, `APP_STORE_CONNECT_API_KEY_P8`, `APP_STORE_CONNECT_API_KEY_KEY`, `APPLE_API_KEY`, `APPLE_API_KEY_BASE64`, `ASC_KEY`, `AUTH_KEY_P8` |
-| Team ID (secret or variable) | `APPLE_TEAM_ID` | `DEVELOPMENT_TEAM`, `TEAM_ID`, `APPLE_DEVELOPER_TEAM_ID` |
-| Distribution certificate p12, base64 | `BUILD_CERTIFICATE_BASE64` | `DISTRIBUTION_CERTIFICATE_BASE64`, `APPLE_CERTIFICATE_BASE64`, `APPLE_CERTIFICATE_P12_BASE64`, `IOS_DISTRIBUTION_CERTIFICATE_BASE64`, `CERTIFICATE_P12_BASE64`, `P12_BASE64` |
-| p12 password | `P12_PASSWORD` | `CERTIFICATE_PASSWORD`, `BUILD_CERTIFICATE_PASSWORD`, `APPLE_CERTIFICATE_PASSWORD` |
-| Provisioning profile, base64 | `BUILD_PROVISION_PROFILE_BASE64` | `PROVISIONING_PROFILE_BASE64`, `APPLE_PROVISIONING_PROFILE_BASE64`, `IOS_PROVISIONING_PROFILE_BASE64`, `PROVISION_PROFILE_BASE64` |
+| API key id | `ASC_KEY_ID` | Key ID from App Store Connect (10 characters) |
+| Issuer id | `ASC_ISSUER_ID` | Issuer ID shown above the keys |
+| API private key | `ASC_KEY_P8` | Full PEM of the `.p8` file, including the `BEGIN PRIVATE KEY` line, or base64 of that PEM |
+| Signing | `APPLE_TEAM_ID` **or** the manual trio below | Team ID (10 characters) for automatic signing |
 
-Manual signing runs when the API key, certificate, password, and profile are all present (team id is read from the profile if needed). Automatic signing runs when the API key and team id are present and the certificate set is not. Otherwise the upload step is skipped.
+Manual signing (use this if you do not want CI to create certificates):
+
+| Secret | What to paste |
+|---|---|
+| `BUILD_CERTIFICATE_BASE64` | Base64 of the Apple Distribution `.p12` |
+| `P12_PASSWORD` | Password for that `.p12` |
+| `BUILD_PROVISION_PROFILE_BASE64` | Base64 of the App Store provisioning profile for `com.vancap.ticketshield` |
+
+Older names still work as aliases (`APP_STORE_CONNECT_API_KEY_ID`, `APP_STORE_CONNECT_API_KEY`, `AUTH_KEY_P8`, and the certificate aliases listed in `scripts/apple-credentials.sh`). Prefer the `ASC_*` names.
+
+The upload is skipped unless `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_KEY_P8` are set **and** signing is set (either `APPLE_TEAM_ID`, or the p12, password, and profile together).
+
+### Still required before a signed TestFlight build
+
+These are not in the repo. The workflow does not invent them and does not submit anything to Apple.
+
+1. Apple Developer Program membership for the team that owns `com.vancap.ticketshield`.
+2. The bundle ID registered, and an App Store Connect app record for ParkShield.
+3. The secrets in the table above, stored as GitHub Actions secrets on this repository (Settings → Secrets and variables → Actions).
+4. A distribution certificate and an App Store profile if you use manual signing. For automatic signing, an Admin API key and `APPLE_TEAM_ID`.
+5. After the first successful upload, open TestFlight and wait for processing. `ITSAppUsesNonExemptEncryption` is already `false`. Add internal testers there. This workflow stops at the upload.
+6. Bump `CURRENT_PROJECT_VERSION` (now `1`) before each later upload. Build 1 has not been uploaded.
+7. Paid Apps agreement, banking, and tax, plus the two IAP products, before Pro can be purchased in TestFlight. They are not required for the binary upload itself.
+8. GitHub Pages on `main` / `/docs` before App Review, so the privacy, terms, and support URLs are not 404. Pages is not required for the TestFlight upload.

@@ -1,11 +1,12 @@
 name: Privacy Pages
 
+# Optional. The supported setup is Settings → Pages → Deploy from a branch →
+# main / docs, enabled after this folder is on main. Do not turn this
+# workflow on at the same time: Actions deployment and branch deployment
+# fight over the same Pages site. This file does not run on push, so a
+# missing Pages environment does not fail CI.
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - "docs/**"
-      - ".github/workflows/privacy-pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -27,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload privacy site
+      - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs

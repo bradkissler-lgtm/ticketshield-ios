@@ -85,20 +85,29 @@ struct PaywallView: View {
             productCard(
                 title: "Lifetime",
                 subtitle: "Pay once",
-                price: entitlements.lifetimeProduct?.displayPrice ?? "$4.99",
+                price: lifetimePriceText,
                 detail: "Keep Pro on this Apple ID. Highlighted because it’s the simple option.",
                 highlighted: true,
                 product: entitlements.lifetimeProduct
             )
             productCard(
-                title: "Annual",
-                subtitle: "Billed once a year",
-                price: entitlements.annualProduct?.displayPrice ?? "$19.99",
-                detail: "Same Pro features, billed yearly. Cancel anytime in Settings › Apple ID › Subscriptions.",
+                title: LegalURLs.annualDisplayName,
+                subtitle: "\(LegalURLs.annualLength) · auto-renews",
+                price: "\(annualPriceText)/yr",
+                detail: "Same Pro features as Lifetime.",
                 highlighted: false,
-                product: entitlements.annualProduct
+                product: entitlements.annualProduct,
+                subscriptionTerms: true
             )
         }
+    }
+
+    private var annualPriceText: String {
+        entitlements.annualProduct?.displayPrice ?? LegalURLs.annualPriceFallback
+    }
+
+    private var lifetimePriceText: String {
+        entitlements.lifetimeProduct?.displayPrice ?? LegalURLs.lifetimePriceFallback
     }
 
     private func productCard(
@@ -107,7 +116,8 @@ struct PaywallView: View {
         price: String,
         detail: String,
         highlighted: Bool,
-        product: Product?
+        product: Product?,
+        subscriptionTerms: Bool = false
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
@@ -125,6 +135,10 @@ struct PaywallView: View {
             Text(detail)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+            if subscriptionTerms {
+                subscriptionDisclosure
+                legalLinks
+            }
             Button {
                 if let product {
                     Task { await entitlements.purchase(product) }
@@ -162,8 +176,31 @@ struct PaywallView: View {
         .disabled(entitlements.purchaseInProgress)
     }
 
+    /// Guideline 3.1.2: title, length, price, and renewal terms for the auto-renewing product,
+    /// shown before the Pro Annual purchase button.
+    private var subscriptionDisclosure: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("\(LegalURLs.annualDisplayName) is an auto-renewing subscription: \(LegalURLs.annualLength) for \(annualPriceText) per year (\(ProductIDs.annual)).")
+            Text("Payment is charged to your Apple ID at confirmation of purchase. The subscription renews each year unless you cancel at least 24 hours before the end of the current period. Your account is charged for renewal within 24 hours before the period ends, at \(annualPriceText) per year.")
+            Text("Manage or cancel in Settings › Apple ID › Subscriptions. Pro Lifetime is \(lifetimePriceText) once and does not renew. No free trial.")
+        }
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var legalLinks: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Link("Terms of Use (EULA)", destination: LegalURLs.terms)
+            Link("Privacy Policy", destination: LegalURLs.privacy)
+            Link("Apple Standard EULA", destination: LegalURLs.appleStandardEULA)
+        }
+        .font(.footnote.weight(.semibold))
+        .tint(TSTheme.teal)
+    }
+
     private var finePrint: some View {
-        Text("Purchases are billed by Apple. Lifetime is a one-time In-App Purchase. Annual renews until you cancel. Photos and sign text are not uploaded. No account is created.")
+        Text("Photos and sign text are not uploaded. No account is created.")
             .font(.caption)
             .foregroundStyle(.secondary)
     }

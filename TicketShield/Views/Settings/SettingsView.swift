@@ -89,9 +89,11 @@ struct SettingsView: View {
                     }
                 }
 
-                Section("Privacy") {
+                Section("Legal") {
                     Button("Privacy on this iPhone") { showPrivacy = true }
-                    Link("Email privacy questions", destination: privacyMailURL)
+                    Link("Privacy Policy", destination: LegalURLs.privacy)
+                    Link("Terms of Use (EULA)", destination: LegalURLs.terms)
+                    Link("Support", destination: LegalURLs.support)
                 }
 
                 Section {
@@ -135,10 +137,6 @@ struct SettingsView: View {
         return "\(version) (\(build))"
     }
 
-    private var privacyMailURL: URL {
-        URL(string: "mailto:bkissler@vancap.com?subject=ParkShield%20privacy")!
-    }
-
     private func replenish() async {
         await NotificationScheduler.replenish(
             spots: spots,
@@ -157,7 +155,10 @@ struct PrivacyOnDeviceView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("ParkShield is built to keep parking-sign photos and reminder times on your iPhone.")
                     Text("The camera and photo library are used only to read a sign you choose. Optical character recognition runs on device with Apple’s Vision framework. Photos are not uploaded, and there is no ParkShield account.")
-                    Text("Reminders use local notifications. In-app purchases are handled by Apple. Questions: bkissler@vancap.com.")
+                    Text("Reminders use local notifications. In-app purchases are handled by Apple.")
+                    Link("Privacy Policy", destination: LegalURLs.privacy)
+                    Link("Terms of Use (EULA)", destination: LegalURLs.terms)
+                    Link("Support", destination: LegalURLs.support)
                 }
                 .padding(24)
             }
