@@ -58,7 +58,7 @@ struct PaywallView: View {
             row("Lead time", free: "15 / 30 / 60 min", pro: "5–120 min")
             row("Weekly digest", free: "—", pro: "Optional")
         }
-        .padding(16)
+        .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
